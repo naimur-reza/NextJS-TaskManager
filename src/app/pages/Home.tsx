@@ -1,23 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "../styles/Home/Home.module.css";
 import FilterBar from "../components/FilterBar";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
 import { useGetAllTasksQuery } from "../redux/api/taskApi";
+import { TaskType } from "../types/types";
 
 export default function Home() {
   const [editingTask, setEditingTask] = useState(null);
 
-  const { data: filteredTasks, isLoading } = useGetAllTasksQuery("");
+  const { data, isLoading } = useGetAllTasksQuery("");
+
+  const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setFilteredTasks(data);
+    }
+  }, [data]);
 
   const handleUpdateTask = () => {};
   const handleAddTask = () => {};
   const handleDeleteTask = () => {};
   const handleToggleCompletion = () => {};
   const handleToggleReminder = () => {};
+
+  const handleFilter = (name: keyof TaskType, field: string) => {
+    const filterData = filteredTasks.filter(
+      (item: TaskType) => item[name] === field
+    );
+    setFilteredTasks(filterData);
+  };
+
+  const handleSearch = (value: string) => {
+    const searchData = filteredTasks.filter((item: TaskType) =>
+      item.name.includes(value)
+    );
+    setFilteredTasks(searchData);
+  };
+
+  const handleTagsSearch = (tags: string[]) => {
+    console.log(tags);
+  };
 
   if (isLoading) return <h1>loading...</h1>;
 
@@ -29,10 +56,12 @@ export default function Home() {
         initialTask={editingTask}
       />
       <FilterBar
-      // onStatusChange={(status) => dispatch(setStatusFilter(status))}
-      // onPriorityChange={(priority) => dispatch(setPriorityFilter(priority))}
-      // onTagsChange={(tags) => dispatch(setTagsFilter(tags))}
-      // onSearchChange={(search) => dispatch(setSearchFilter(search))}
+        onStatusChange={(status: string) => handleFilter("completed", status)}
+        onPriorityChange={(priority: string) =>
+          handleFilter("priority", priority)
+        }
+        onTagsChange={(tags: string[]) => handleTagsSearch(tags)}
+        onSearchChange={(search: string) => handleSearch(search)}
       />
       <TaskList
         tasks={filteredTasks}

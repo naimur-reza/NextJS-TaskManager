@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import styles from "../styles/FilterBar.module.css";
 export default function FilterBar({
@@ -5,12 +6,7 @@ export default function FilterBar({
   onPriorityChange,
   onTagsChange,
   onSearchChange,
-}: {
-  onStatusChange: any;
-  onPriorityChange: (value: string) => void;
-  onTagsChange: (tags: string[]) => void;
-  onSearchChange: (value: string) => void;
-}) {
+}: any) {
   const [tags, setTags] = useState<string>("");
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {

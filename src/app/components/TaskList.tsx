@@ -7,13 +7,7 @@ export default function TaskList({
   onDelete,
   onToggleCompletion,
   onToggleReminder,
-}: {
-  tasks: any[];
-  onEdit: (task: any) => void;
-  onDelete: (id: number) => void;
-  onToggleCompletion: (id: number) => void;
-  onToggleReminder: (id: number) => void;
-}) {
+}: any) {
   const isTaskDueSoon = (dueDate: string) => {
     const now = new Date();
     const taskDate = new Date(dueDate);
@@ -23,9 +17,9 @@ export default function TaskList({
 
   return (
     <ul className={styles.taskList}>
-      {tasks.map((task) => (
+      {tasks?.map((task: any) => (
         <li
-          key={task.id}
+          key={task._id}
           className={`${styles.taskItem} ${
             task.completed ? styles.completed : ""
           } ${styles[task.priority]}`}
