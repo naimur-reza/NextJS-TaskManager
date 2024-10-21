@@ -36,6 +36,13 @@ export const tasksApi = createApi({
       }),
       invalidatesTags: ["Tasks"],
     }),
+    toggleComplete: builder.mutation({
+      query: ({ id }) => ({
+        url: `/tasks/${id}/toggle-completion`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Tasks"],
+    }),
   }),
 });
 
@@ -46,4 +53,5 @@ export const {
   useGetAllTasksQuery,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
+  useToggleCompleteMutation,
 } = tasksApi;

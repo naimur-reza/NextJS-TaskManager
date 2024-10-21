@@ -11,6 +11,7 @@ import {
   useAddTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
+  useToggleCompleteMutation,
 } from "../redux/api/taskApi";
 import { TaskType } from "../types/types";
 
@@ -21,6 +22,7 @@ export default function Home() {
   const [addTask] = useAddTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
+  const [toggleComplete] = useToggleCompleteMutation();
 
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
 
@@ -46,7 +48,9 @@ export default function Home() {
     console.log(_id);
     await deleteTask({ id: _id });
   };
-  const handleToggleCompletion = () => {};
+  const handleToggleCompletion = async (taskId: string) => {
+    await toggleComplete({ id: taskId });
+  };
   const handleToggleReminder = () => {};
 
   const handleFilter = (name: keyof TaskType, field: string) => {

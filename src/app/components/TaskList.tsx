@@ -38,7 +38,7 @@ export default function TaskList({
           </div>
           <div className={styles.taskActions}>
             <button
-              onClick={() => onToggleCompletion(task.id)}
+              onClick={() => onToggleCompletion(task._id)}
               className={styles.button}
             >
               {task.completed ? "Mark Incomplete" : "Mark Complete"}
