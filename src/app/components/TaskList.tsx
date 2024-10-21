@@ -53,7 +53,7 @@ export default function TaskList({
               Delete
             </button>
             <button
-              onClick={() => onToggleReminder(task._id)}
+              onClick={() => onToggleReminder(task)}
               className={`${styles.button} ${styles.reminder}`}
             >
               {task.reminder ? "Remove Reminder" : "Set Reminder"}

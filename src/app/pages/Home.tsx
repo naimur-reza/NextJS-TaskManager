@@ -51,7 +51,16 @@ export default function Home() {
   const handleToggleCompletion = async (taskId: string) => {
     await toggleComplete({ id: taskId });
   };
-  const handleToggleReminder = () => {};
+  const handleToggleReminder = async (task: TaskType) => {
+    const { _id, ...taskData } = task;
+
+    await updateTask({
+      id: _id,
+      data: {
+        reminder: !taskData.reminder,
+      },
+    });
+  };
 
   const handleFilter = (name: keyof TaskType, field: string) => {
     const filterData = filteredTasks.filter(
