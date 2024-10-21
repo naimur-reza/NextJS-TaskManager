@@ -1,0 +1,89 @@
+.taskList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.taskItem {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.taskItem.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.taskItem.low {
+  border-left: 5px solid green;
+}
+
+.taskItem.medium {
+  border-left: 5px solid yellow;
+}
+
+.taskItem.high {
+  border-left: 5px solid red;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dueDate {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8em;
+}
+
+.taskActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button {
+  padding: 5px 10px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0051a2;
+}
+
+.button.reminder {
+  background-color: #f0ad4e;
+}
+
+.button.reminder:hover {
+  background-color: #ec971f;
+}
+
+.reminderAlert {
+  background-color: #ffeeba;
+  color: #856404;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}

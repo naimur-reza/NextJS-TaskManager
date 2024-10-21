@@ -1,0 +1,16 @@
+.filterBar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.select,
+.input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input {
+  flex-grow: 1;
+}
