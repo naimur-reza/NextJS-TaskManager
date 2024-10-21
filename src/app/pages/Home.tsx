@@ -10,6 +10,7 @@ import {
   useGetAllTasksQuery,
   useAddTaskMutation,
   useUpdateTaskMutation,
+  useDeleteTaskMutation,
 } from "../redux/api/taskApi";
 import { TaskType } from "../types/types";
 
@@ -19,6 +20,7 @@ export default function Home() {
   const { data, isLoading } = useGetAllTasksQuery("");
   const [addTask] = useAddTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
 
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
 
@@ -40,7 +42,10 @@ export default function Home() {
     const { _id, ...taskData } = task;
     await updateTask({ id: _id, data: taskData });
   };
-  const handleDeleteTask = () => {};
+  const handleDeleteTask = async (_id: string) => {
+    console.log(_id);
+    await deleteTask({ id: _id });
+  };
   const handleToggleCompletion = () => {};
   const handleToggleReminder = () => {};
 

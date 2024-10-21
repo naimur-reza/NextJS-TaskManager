@@ -22,10 +22,11 @@ export const tasksApi = createApi({
     }),
 
     deleteTask: builder.mutation({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `/tasks/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Tasks"],
     }),
     updateTask: builder.mutation({
       query: ({ id, data }) => ({
