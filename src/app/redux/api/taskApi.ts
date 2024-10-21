@@ -18,12 +18,31 @@ export const tasksApi = createApi({
 
     getAllTasks: builder.query<TaskType[], string>({
       query: () => `/tasks`,
-
       providesTags: ["Tasks"],
+    }),
+
+    deleteTask: builder.mutation({
+      query: (id) => ({
+        url: `/tasks/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    updateTask: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/tasks/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Tasks"],
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useAddTaskMutation, useGetAllTasksQuery } = tasksApi;
+export const {
+  useAddTaskMutation,
+  useGetAllTasksQuery,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} = tasksApi;

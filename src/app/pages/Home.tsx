@@ -6,7 +6,11 @@ import styles from "../styles/Home/Home.module.css";
 import FilterBar from "../components/FilterBar";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
-import { useGetAllTasksQuery, useAddTaskMutation } from "../redux/api/taskApi";
+import {
+  useGetAllTasksQuery,
+  useAddTaskMutation,
+  useUpdateTaskMutation,
+} from "../redux/api/taskApi";
 import { TaskType } from "../types/types";
 
 export default function Home() {
@@ -14,6 +18,7 @@ export default function Home() {
 
   const { data, isLoading } = useGetAllTasksQuery("");
   const [addTask] = useAddTaskMutation();
+  const [updateTask] = useUpdateTaskMutation();
 
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
 
@@ -31,7 +36,10 @@ export default function Home() {
       console.log(error);
     }
   };
-  const handleUpdateTask = () => {};
+  const handleUpdateTask = async (task: TaskType) => {
+    const { _id, ...taskData } = task;
+    await updateTask({ id: _id, data: taskData });
+  };
   const handleDeleteTask = () => {};
   const handleToggleCompletion = () => {};
   const handleToggleReminder = () => {};
