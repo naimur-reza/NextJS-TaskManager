@@ -9,6 +9,13 @@ A simple task management app that allows users to manage tasks with features suc
 - Organize tasks by priority.
 - Reminder alerts for tasks due within 24 hours.
 
+## Technologies Used
+
+- **Frontend**: React.js
+- **State Management**: Redux-Toolkit
+- **Backend**: Express.Js
+- **Database**: MongoDB
+
 ## Installation
 
 To run this project locally, follow these steps:
