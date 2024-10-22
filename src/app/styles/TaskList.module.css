@@ -16,15 +16,15 @@
 }
 
 .taskItem.low {
-  border-left: 5px solid green;
+  border-left: 5px solid #b4d6cd;
 }
 
 .taskItem.medium {
-  border-left: 5px solid yellow;
+  border-left: 5px solid #ffda76;
 }
 
 .taskItem.high {
-  border-left: 5px solid red;
+  border-left: 5px solid #ff4e88;
 }
 
 .taskHeader {
@@ -61,8 +61,8 @@
 
 .button {
   padding: 5px 10px;
-  background-color: #0070f3;
-  color: white;
+  background-color: #6eacda;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 4px;
   cursor: pointer;

@@ -15,9 +15,13 @@ export default function TaskList({
     return diffHours <= 24;
   };
 
+  const sortedTasks = tasks?.sort((a: any, b: any) => {
+    return a.completed === b.completed ? 0 : a.completed ? 1 : -1;
+  });
+
   return (
     <ul className={styles.taskList}>
-      {tasks?.map((task: any) => (
+      {sortedTasks?.map((task: any) => (
         <li
           key={task._id}
           className={`${styles.taskItem} ${
@@ -43,7 +47,16 @@ export default function TaskList({
             >
               {task.completed ? "Mark Incomplete" : "Mark Complete"}
             </button>
-            <button onClick={() => onEdit(task)} className={styles.button}>
+            <button
+              onClick={() => {
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+                onEdit(task);
+              }}
+              className={styles.button}
+            >
               Edit
             </button>
             <button

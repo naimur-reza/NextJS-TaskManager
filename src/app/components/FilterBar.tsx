@@ -1,12 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import styles from "../styles/FilterBar.module.css";
+
+interface FilterBarProps {
+  onStatusChange: (status: string) => void;
+  onPriorityChange: (priority: string) => void;
+  onTagsChange: (tags: string[]) => void;
+  onSearchChange: (search: string) => void;
+}
+
 export default function FilterBar({
   onStatusChange,
   onPriorityChange,
   onTagsChange,
   onSearchChange,
-}: any) {
+}: FilterBarProps) {
   const [tags, setTags] = useState<string>("");
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {

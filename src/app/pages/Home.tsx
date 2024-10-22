@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useState, useMemo } from "react";
 import styles from "../styles/Home/Home.module.css";
 import FilterBar from "../components/FilterBar";
 import TaskForm from "../components/TaskForm";
@@ -14,9 +13,17 @@ import {
   useToggleCompleteMutation,
 } from "../redux/api/taskApi";
 import { TaskType } from "../types/types";
+import toast from "react-hot-toast";
+import Loader from "../components/ui/Loader";
 
 export default function Home() {
-  const [editingTask, setEditingTask] = useState(null);
+  const [editingTask, setEditingTask] = useState<TaskType | null>(null);
+  const [filters, setFilters] = useState({
+    status: "all",
+    priority: "all",
+    tags: [] as string[],
+    search: "",
+  });
 
   const { data, isLoading } = useGetAllTasksQuery("");
   const [addTask] = useAddTaskMutation();
@@ -24,63 +31,85 @@ export default function Home() {
   const [deleteTask] = useDeleteTaskMutation();
   const [toggleComplete] = useToggleCompleteMutation();
 
-  const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
-
-  useEffect(() => {
-    if (data) {
-      setFilteredTasks(data);
-    }
-  }, [data]);
+  const filteredTasks = useMemo(() => {
+    if (!data) return [];
+    return data.filter((task: TaskType) => {
+      const matchesStatus =
+        filters.status === "all" ||
+        (filters.status === "completed" && task.completed) ||
+        (filters.status === "pending" && !task.completed);
+      const matchesPriority =
+        filters.priority === "all" || task.priority === filters.priority;
+      const matchesTags =
+        filters.tags.length === 0 ||
+        filters.tags.some((tag) => task.tags.includes(tag));
+      const matchesSearch =
+        task.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        task.description.toLowerCase().includes(filters.search.toLowerCase());
+      return matchesStatus && matchesPriority && matchesTags && matchesSearch;
+    });
+  }, [data, filters]);
 
   const handleAddTask = async (task: TaskType) => {
     try {
-      const res = await addTask({ data: task });
-      console.log(res);
+      await addTask({ data: task }).unwrap();
+      toast.success("Task added successfully");
     } catch (error) {
-      console.log(error);
+      console.error("Failed to add task:", error);
     }
   };
+
   const handleUpdateTask = async (task: TaskType) => {
-    const { _id, ...taskData } = task;
-    await updateTask({ id: _id, data: taskData });
+    try {
+      const { _id, ...taskData } = task;
+      console.log(task);
+      await updateTask({ id: _id, data: taskData }).unwrap();
+      setEditingTask(null);
+      toast.success("Task updated successfully");
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    }
   };
+
   const handleDeleteTask = async (_id: string) => {
-    console.log(_id);
-    await deleteTask({ id: _id });
+    try {
+      await deleteTask({ id: _id }).unwrap();
+      toast.success("Task deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
   };
+
   const handleToggleCompletion = async (taskId: string) => {
-    await toggleComplete({ id: taskId });
+    try {
+      await toggleComplete({ id: taskId }).unwrap();
+      toast.success("Task completion status updated successfully");
+    } catch (error) {
+      console.error("Failed to toggle task completion:", error);
+    }
   };
+
   const handleToggleReminder = async (task: TaskType) => {
-    const { _id, ...taskData } = task;
-
     await updateTask({
-      id: _id,
-      data: {
-        reminder: !taskData.reminder,
-      },
-    });
+      id: task._id,
+      data: { reminder: !task.reminder },
+    }).unwrap();
+    toast.success("Task reminder status updated successfully");
   };
 
-  const handleFilter = (name: keyof TaskType, field: string) => {
-    const filterData = filteredTasks.filter(
-      (item: TaskType) => item[name] === field
-    );
-    setFilteredTasks(filterData);
+  const handleFilter = (name: "status" | "priority", value: string) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSearch = (value: string) => {
-    const searchData = filteredTasks.filter((item: TaskType) =>
-      item.name.includes(value)
-    );
-    setFilteredTasks(searchData);
+    setFilters((prev) => ({ ...prev, search: value }));
   };
 
   const handleTagsSearch = (tags: string[]) => {
-    console.log(tags);
+    setFilters((prev) => ({ ...prev, tags }));
   };
 
-  if (isLoading) return <h1>loading...</h1>;
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.container}>
@@ -90,12 +119,12 @@ export default function Home() {
         initialTask={editingTask}
       />
       <FilterBar
-        onStatusChange={(status: string) => handleFilter("completed", status)}
+        onStatusChange={(status: string) => handleFilter("status", status)}
         onPriorityChange={(priority: string) =>
           handleFilter("priority", priority)
         }
-        onTagsChange={(tags: string[]) => handleTagsSearch(tags)}
-        onSearchChange={(search: string) => handleSearch(search)}
+        onTagsChange={handleTagsSearch}
+        onSearchChange={handleSearch}
       />
       <TaskList
         tasks={filteredTasks}
